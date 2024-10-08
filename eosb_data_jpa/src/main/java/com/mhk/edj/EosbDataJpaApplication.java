@@ -50,14 +50,40 @@ public class EosbDataJpaApplication {
            e.printStackTrace();
         }
 */
+        /*
+        transient state
+        persistence state/  managed state
+        detach state
+        removed state
+         */
+//transaction jokhn shuru hoi data gula tokhn buffer/pool ba cache  a thake commit er aghe
         transactional((em)->{
-            Student s = new Student();
+          /*  Student s = new Student();
             s.setId(null);
-            s.setName("rakib");
-            s.setCgpa(3.86f);
+            s.setName("abir");
+            s.setCgpa(2.76f);
             em.persist(s);
            // System.out.println(1/0);
-            System.out.println(s);
+            System.out.println(s);*/
+         //   --------------------------------------//
+           /* Student s = new Student();
+            s.setId(null);
+            s.setName("arif");    //----> transient state  ai obostai db er sathe shomporko nai
+            s.setCgpa(3.11f);                              // ------> transition (state change)
+            em.persist(s);   // persistence state   persisent contex a ase cache a ase
+            s.setCgpa(3.00f);  // db te store hbe  3.00, jehetu commit hoinai, persistence contex a thakle ja change hbe setai final hye db te jabe commit er agh porjontoh
+*/
+       //--------------------detach-----------------------//
+            Student s = new Student();
+            s.setId(15);
+            s.setName("karim");
+            s.setCgpa(4.23f);
+            em.persist(s);
+            em.detach(s);// aikhane detach dewai persistence state theke detach a chole jawar ktha, kintu merge na dileo detach state theke keno commit korle store hcce db te ?
+
+            //------------------//
+
+
 
         });
 
@@ -67,7 +93,7 @@ public class EosbDataJpaApplication {
 
         em.getTransaction().begin();  //before advice
         try {
-            consumer.accept(em);
+            consumer.accept(em); //pointcut
         } catch (Exception e) {
             em.getTransaction().rollback();//after throwing advice
             throw new RuntimeException("Can't save the object");
@@ -88,3 +114,4 @@ Spring Data Jpa -> Jpa ->  Hibernate
                            EclipsLink             ---> JDBC    --> PgSqlDriver
                            Apache Open Jpa
         */
+//addddddddddd

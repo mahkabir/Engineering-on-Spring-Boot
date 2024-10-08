@@ -12,7 +12,7 @@ import lombok.*;
 @Table(name="student_table")
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private Float cgpa;
