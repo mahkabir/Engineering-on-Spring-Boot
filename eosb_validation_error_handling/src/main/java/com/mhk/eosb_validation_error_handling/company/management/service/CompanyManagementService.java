@@ -1,8 +1,11 @@
 package com.mhk.eosb_validation_error_handling.company.management.service;
 
+import com.mhk.eosb_validation_error_handling.company.management.domain.common.PageUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.entity.Company;
 import com.mhk.eosb_validation_error_handling.company.management.domain.request.CompanyDetailsRequest;
+import com.mhk.eosb_validation_error_handling.company.management.domain.request.PaginationRequest;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
+import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseMessage;
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.InvalidRequestDataException;
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.RecordAlreadyExistsException;
@@ -12,6 +15,8 @@ import com.mhk.eosb_validation_error_handling.company.management.repository.Comp
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -88,5 +93,33 @@ private final CompanyMapper companyMapper;
         company.setLogo(companyDetailsRequest.getLogo());
         company.setRemarks(companyDetailsRequest.getRemarks());
         companyRepository.save(company);
+    }
+
+    @Override
+    @Transactional
+    public PaginationResponse<CompanyDetailsResponse> getAllCompanies(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String companyName, String contactMobile) {
+        final PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
+        final Pageable pageable = PageUtils.getPageable(paginationRequest);
+
+        /*final String startDate = Objects.isNull(fromDate) ? null :
+                DateTimeUtils.formatDate(fromDate, "yyyy-MM-dd");
+        final String endDate = Objects.isNull(toDate) ? null :
+                DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1), "yyyy-MM-dd");*/
+
+        final Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(
+                        StringUtils.isEmpty(companyName) ? null : companyName,
+                        StringUtils.isEmpty(contactMobile) ? null : contactMobile,
+                        pageable
+                )
+                .map(companyDetails -> {
+                    final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(companyDetails);
+                   /* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
+                    transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*/
+                    return companyDetailsResponse;
+                });
+
+        return page.getContent().isEmpty() ?
+                PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
+                PageUtils.mapToPaginationResponseDto(page, paginationRequest);
     }
 }
