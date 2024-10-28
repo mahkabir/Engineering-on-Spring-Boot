@@ -22,7 +22,7 @@ public class CompanyDetailsRequest {
     @NotBlank(message = "Contact person is required")
     private String contactPerson;
 
-   // @NotBlank(message = "Contact mobile is required")
+    @NotBlank(message = "Contact mobile is required")
   //  @Pattern(regexp = "(\\+88)?01[3-9]\\d{8}", message = "Found invalid phone number")
     @BdPhoneNumber(message = "Found invalid phone number")
     private String contactMobile;

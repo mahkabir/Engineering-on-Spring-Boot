@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "LBS_TBL_COMPANY")
-public class Company {
+public class Company extends BaseEntity {
 
     @Id
     @Column(name = "ID")

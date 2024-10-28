@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,15 +37,15 @@ private final CompanyMapper companyMapper;
                 !isValidPhoneNumber(companyDetailsRequest.getContactMobile(), PHONE_NUMBER_VALID_REGEX)) {
             throw new InvalidRequestDataException(ResponseMessage.INVALID_PHONE_NUMBER);
         }
-        Optional<Company> company =
+        Optional<Company> companyOptional =
                 companyRepository.findByCompanyName(companyDetailsRequest.getCompanyName());
-        if (company.isPresent()) {
+        if (companyOptional.isPresent()) {
             throw new RecordAlreadyExistsException(ResponseMessage.RECORD_ALREADY_EXIST);
         }
-        final Company company1 = companyMapper.mapDtoToEntity(companyDetailsRequest);
+        final Company company = companyMapper.mapDtoToEntity(companyDetailsRequest);
 
-        saveCompany(company1);
-        final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(company1);
+        saveCompany(company);
+        final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(company);
 
         return companyDetailsResponse;
     }
@@ -61,6 +62,8 @@ private final CompanyMapper companyMapper;
 
     @Transactional
     public void saveCompany(final Company company) {
+        company.setCreatedBy("admin abc");
+        company.setCreatedDate(getCurrentDate());
         companyRepository.save(company);
     }
 
@@ -92,6 +95,8 @@ private final CompanyMapper companyMapper;
         company.setIsEnableCharging(companyDetailsRequest.getIsEnableCharging());
         company.setLogo(companyDetailsRequest.getLogo());
         company.setRemarks(companyDetailsRequest.getRemarks());
+        company.setUpdatedBy("def admin");
+        company.setUpdatedDate(getCurrentDate());
         companyRepository.save(company);
     }
 
@@ -121,5 +126,9 @@ private final CompanyMapper companyMapper;
         return page.getContent().isEmpty() ?
                 PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+    }
+
+    public Date getCurrentDate() {
+        return new Date();
     }
 }

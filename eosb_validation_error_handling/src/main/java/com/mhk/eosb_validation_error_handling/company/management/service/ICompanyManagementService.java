@@ -4,8 +4,6 @@ import com.mhk.eosb_validation_error_handling.company.management.domain.request.
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 
-import java.util.Date;
-
 public interface ICompanyManagementService {
 
     CompanyDetailsResponse saveCompanyDetails(CompanyDetailsRequest companyDetailsRequest);
