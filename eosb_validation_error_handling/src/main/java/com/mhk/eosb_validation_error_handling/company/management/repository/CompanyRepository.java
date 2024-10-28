@@ -1,6 +1,7 @@
 package com.mhk.eosb_validation_error_handling.company.management.repository;
 
 import com.mhk.eosb_validation_error_handling.company.management.domain.entity.Company;
+import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,11 +15,23 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     Optional<Company> findByCompanyName(String companyName);
 
-    @Query("select tf from Company tf where (:companyName is null or tf.companyName like %:companyName%) and " +
-            "(:companyNmae is null or tf.companyName like %:companyName%) and " +
-            "(:contactMobile is null or tf.contactMobile like %:contactMobile%)")
-    Page<Company> findAllByParam(String companyName,
-                                 String contactMobile,
-                                 Pageable pageable);
+    @Query("select new com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse(" +
+            "c.companyName, " +
+            "c.address, " +
+            "c.contactPerson, " +
+            "c.contactMobile, " +
+            "c.emailAddress, " +
+            "c.billingNumber, " +
+            "c.billingAmount, " +
+            "c.dailyAmount, " +
+            "c.isEnableCharging, " +
+            "c.logo, " +
+            "c.remarks) " +
+            "from Company c " +
+            "where (:companyName is null or c.companyName = :companyName) and " +
+            "(:contactMobile is null or c.contactMobile = :contactMobile)" )
+    Page<CompanyDetailsResponse> findAllByParam(String companyName,
+                                                String contactMobile,
+                                                Pageable pageable);
 
 }

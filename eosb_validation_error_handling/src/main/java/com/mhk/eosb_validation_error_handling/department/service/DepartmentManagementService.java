@@ -1,5 +1,6 @@
 package com.mhk.eosb_validation_error_handling.department.service;
 
+import com.mhk.eosb_validation_error_handling.company.management.domain.common.DateTimeUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.PageUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.request.PaginationRequest;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
@@ -101,32 +102,30 @@ private final CompanyMapper companyMapper;
 
     @Override
     @Transactional
-    public PaginationResponse<CompanyDetailsResponse> getAllDepartments(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String companyName, String contactMobile) {
-        final PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
-        final Pageable pageable = PageUtils.getPageable(paginationRequest);
+    public PaginationResponse<DepartmentDetailsResponse> getAllDepartments(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String departmentName, String companyName, Date fromDate, Date toDate) {
 
-        /*final String startDate = Objects.isNull(fromDate) ? null :
-                DateTimeUtils.formatDate(fromDate, "yyyy-MM-dd");
-        final String endDate = Objects.isNull(toDate) ? null :
-                DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1), "yyyy-MM-dd");*/
+        return getDepartmentDetailsPaginationResponse(pageNumber, pageSize, sortBy, sortOrder,departmentName, companyName, fromDate, toDate);
 
-        final Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(
-                        StringUtils.isEmpty(companyName) ? null : companyName,
-                        StringUtils.isEmpty(contactMobile) ? null : contactMobile,
-                        pageable
-                )
-                .map(companyDetails -> {
-                    final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(companyDetails);
-                   /* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
-                    transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*/
-                    return companyDetailsResponse;
-                });
-
-        return page.getContent().isEmpty() ?
-                PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
-                PageUtils.mapToPaginationResponseDto(page, paginationRequest);
     }
     public Date getCurrentDate() {
         return new Date();
+    }
+
+    private PaginationResponse<DepartmentDetailsResponse> getDepartmentDetailsPaginationResponse(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String departmentName, String companyName, Date fromDate, Date toDate) {
+
+        PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
+        Pageable pageable = PageUtils.getPageable(paginationRequest);
+
+        String startDate = Objects.isNull(fromDate) ? null : DateTimeUtils.formatDate(fromDate, "yyyy-MM-dd");
+        String endDate = Objects.isNull(toDate) ? null : DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1),
+                "yyyy-MM-dd");
+
+        Page<DepartmentDetailsResponse> page = departmentRepository.findAllByParam(departmentName, companyName, pageable);
+
+        //List<CompanyDetailsResponse> transactionHistoryList = page.getContent();
+
+        return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
+                PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+
     }
 }

@@ -1,13 +1,12 @@
 package com.mhk.eosb_validation_error_handling.department.response;
 
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepartmentDetailsResponse {
 
     private String departmentName;

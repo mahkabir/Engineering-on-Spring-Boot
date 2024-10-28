@@ -4,6 +4,8 @@ import com.mhk.eosb_validation_error_handling.company.management.domain.request.
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 
+import java.util.Date;
+
 public interface ICompanyManagementService {
 
     CompanyDetailsResponse saveCompanyDetails(CompanyDetailsRequest companyDetailsRequest);
@@ -13,7 +15,9 @@ public interface ICompanyManagementService {
                                                                       String sortBy,
                                                                       String sortOrder,
                                                                       String companyName,
-                                                                      String contactMobile);
+                                                                      String contactMobile,
+                                                                      Date fromDate,
+                                                                      Date toDate );
 
 
 

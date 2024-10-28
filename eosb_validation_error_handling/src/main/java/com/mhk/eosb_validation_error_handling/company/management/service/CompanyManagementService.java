@@ -1,5 +1,6 @@
 package com.mhk.eosb_validation_error_handling.company.management.service;
 
+import com.mhk.eosb_validation_error_handling.company.management.domain.common.DateTimeUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.PageUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.entity.Company;
 import com.mhk.eosb_validation_error_handling.company.management.domain.request.CompanyDetailsRequest;
@@ -19,9 +20,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -102,14 +103,13 @@ private final CompanyMapper companyMapper;
 
     @Override
     @Transactional
-    public PaginationResponse<CompanyDetailsResponse> getAllCompanies(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String companyName, String contactMobile) {
-        final PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
+    public PaginationResponse<CompanyDetailsResponse> getAllCompanies(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String companyName, String contactMobile, Date fromDate, Date toDate) {
+       /* final PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
         final Pageable pageable = PageUtils.getPageable(paginationRequest);
 
-        /*final String startDate = Objects.isNull(fromDate) ? null :
-                DateTimeUtils.formatDate(fromDate, "yyyy-MM-dd");
-        final String endDate = Objects.isNull(toDate) ? null :
-                DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1), "yyyy-MM-dd");*/
+        String startDate = Objects.isNull(fromDate) ? null : DateTimeUtils.formatDate(fromDate, "yyyy-MM-dd");
+        String endDate = Objects.isNull(toDate) ? null : DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1),
+                "yyyy-MM-dd");
 
         final Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(
                         StringUtils.isEmpty(companyName) ? null : companyName,
@@ -118,14 +118,33 @@ private final CompanyMapper companyMapper;
                 )
                 .map(companyDetails -> {
                     final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(companyDetails);
-                   /* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
-                    transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*/
+                   *//* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
+                    transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*//*
                     return companyDetailsResponse;
                 });
 
         return page.getContent().isEmpty() ?
                 PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
+                PageUtils.mapToPaginationResponseDto(page, paginationRequest);*/
+        return getCompanyDetailsPaginationResponse(pageNumber, pageSize, sortBy, sortOrder,companyName, contactMobile, fromDate, toDate);
+    }
+
+    private PaginationResponse<CompanyDetailsResponse> getCompanyDetailsPaginationResponse(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder,String companyName, String contactMobile, Date fromDate, Date toDate) {
+
+        PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
+        Pageable pageable = PageUtils.getPageable(paginationRequest);
+
+        String startDate = Objects.isNull(fromDate) ? null : DateTimeUtils.formatDate(fromDate, "yyyy-MM-dd");
+        String endDate = Objects.isNull(toDate) ? null : DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1),
+                "yyyy-MM-dd");
+
+        Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(companyName, contactMobile, pageable);
+
+        //List<CompanyDetailsResponse> transactionHistoryList = page.getContent();
+
+        return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+
     }
 
     public Date getCurrentDate() {

@@ -105,21 +105,22 @@ private final DesignationMapper designationMapper;
         final String endDate = Objects.isNull(toDate) ? null :
                 DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1), "yyyy-MM-dd");*/
 
-        final Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(
+        /*final Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(
                         StringUtils.isEmpty(companyName) ? null : companyName,
                         StringUtils.isEmpty(contactMobile) ? null : contactMobile,
                         pageable
                 )
                 .map(companyDetails -> {
                     final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(companyDetails);
-                   /* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
-                    transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*/
+                   *//* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
+                    transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*//*
                     return companyDetailsResponse;
                 });
 
         return page.getContent().isEmpty() ?
                 PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
-                PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+                PageUtils.mapToPaginationResponseDto(page, paginationRequest);*/
+        return null;
     }
 
     public Date getCurrentDate() {

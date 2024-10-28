@@ -6,16 +6,20 @@ import com.mhk.eosb_validation_error_handling.company.management.domain.response
 import com.mhk.eosb_validation_error_handling.department.request.DepartmentDetailsRequest;
 import com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse;
 
+import java.util.Date;
+
 public interface IDepartmentManagementService {
 
     DepartmentDetailsResponse saveDepartmentDetails(DepartmentDetailsRequest departmentDetailsRequest);
     DepartmentDetailsResponse editDepartmentDetails(DepartmentDetailsRequest departmentDetailsRequest);
-    PaginationResponse<CompanyDetailsResponse> getAllDepartments(Integer pageNumber,
+    PaginationResponse<DepartmentDetailsResponse> getAllDepartments(Integer pageNumber,
                                                                       Integer pageSize,
                                                                       String sortBy,
                                                                       String sortOrder,
+                                                                      String departmentName,
                                                                       String companyName,
-                                                                      String contactMobile);
+                                                                      Date fromDate,
+                                                                      Date toDate);
 
 
 

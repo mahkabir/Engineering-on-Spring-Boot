@@ -9,7 +9,10 @@ import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseM
 import com.mhk.eosb_validation_error_handling.company.management.service.ICompanyManagementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping( "/company-management")
@@ -35,10 +38,12 @@ public class CompanyController {
                                                                                              @RequestParam(required = false, defaultValue = "id") String sortBy,
                                                                                              @RequestParam(required = false, defaultValue = "desc") String sortOrder,
                                                                                              @RequestParam(required = false) String companyName,
-                                                                                             @RequestParam(required = false) String contactMobile) {
+                                                                                             @RequestParam(required = false) String contactMobile,
+                                                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+                                                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
 
         final PaginationResponse<CompanyDetailsResponse> response =
-                iCompanyManagementService.getAllCompanies(pageNumber, pageSize, sortBy, sortOrder, companyName, contactMobile);
+                iCompanyManagementService.getAllCompanies(pageNumber, pageSize, sortBy, sortOrder, companyName, contactMobile, fromDate, toDate);
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
     }
 
