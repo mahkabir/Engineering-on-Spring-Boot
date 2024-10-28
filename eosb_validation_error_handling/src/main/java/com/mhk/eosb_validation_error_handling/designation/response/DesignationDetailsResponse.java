@@ -9,7 +9,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class DesignationDetailsResponse {
 
-    private String name;
+    private String designationName;
     private Long companyId;
     private String companyName;
     private String remarks;

@@ -16,7 +16,7 @@ import lombok.Setter;
 public class DesignationDetailsRequest {
 
     @NotBlank(message = "Name is required")
-    private String name;
+    private String designationName;
 
     @NotNull(message = "Company ID is required")
     private Long companyId;

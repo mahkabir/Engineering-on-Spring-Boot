@@ -13,13 +13,13 @@ import java.util.Optional;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
-    Optional<Company> findByCompanyName(String companyName);
-
+    Optional<Department> findByDepartmentName(String departmentName);
+/*
     @Query("select tf from Company tf where (:companyName is null or tf.companyName like %:companyName%) and " +
             "(:companyNmae is null or tf.companyName like %:companyName%) and " +
             "(:contactMobile is null or tf.contactMobile like %:contactMobile%)")
     Page<Company> findAllByParam(String companyName,
                                  String contactMobile,
-                                 Pageable pageable);
+                                 Pageable pageable);*/
 
 }

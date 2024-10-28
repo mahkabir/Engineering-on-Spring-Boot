@@ -1,8 +1,6 @@
 package com.mhk.eosb_validation_error_handling.department.service;
 
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.PageUtils;
-import com.mhk.eosb_validation_error_handling.company.management.domain.entity.Company;
-import com.mhk.eosb_validation_error_handling.company.management.domain.request.CompanyDetailsRequest;
 import com.mhk.eosb_validation_error_handling.company.management.domain.request.PaginationRequest;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
@@ -11,8 +9,12 @@ import com.mhk.eosb_validation_error_handling.company.management.exceptions.Inva
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.RecordAlreadyExistsException;
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.RecordNotFoundException;
 import com.mhk.eosb_validation_error_handling.company.management.mapper.CompanyMapper;
+import com.mhk.eosb_validation_error_handling.company.management.repository.CompanyRepository;
+import com.mhk.eosb_validation_error_handling.department.entity.Department;
 import com.mhk.eosb_validation_error_handling.department.mapper.DepartmentMapper;
-import com.mhk.eosb_validation_error_handling.department.repository.CompanyRepository;
+import com.mhk.eosb_validation_error_handling.department.repo.DepartmentRepository;
+import com.mhk.eosb_validation_error_handling.department.request.DepartmentDetailsRequest;
+import com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,27 +30,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DepartmentManagementService implements IDepartmentManagementService {
 private final CompanyRepository companyRepository;
+private final DepartmentRepository departmentRepository;
 private static final String PHONE_NUMBER_VALID_REGEX = "[0-9]+";
 private final DepartmentMapper departmentMapper;
+private final CompanyMapper companyMapper;
 
     @Override
-    public CompanyDetailsResponse saveDepartmentDetails(final CompanyDetailsRequest companyDetailsRequest) {
-        validateRequest(companyDetailsRequest);
-        if (StringUtils.isNotEmpty(companyDetailsRequest.getContactMobile()) &&
-                !isValidPhoneNumber(companyDetailsRequest.getContactMobile(), PHONE_NUMBER_VALID_REGEX)) {
-            throw new InvalidRequestDataException(ResponseMessage.INVALID_PHONE_NUMBER);
-        }
-        Optional<Company> company =
-                companyRepository.findByCompanyName(companyDetailsRequest.getCompanyName());
-        if (company.isPresent()) {
+    public DepartmentDetailsResponse saveDepartmentDetails(final DepartmentDetailsRequest departmentDetailsRequest) {
+        validateRequest(departmentDetailsRequest);
+        Optional<Department> departmentOptional =
+                departmentRepository.findByDepartmentName(departmentDetailsRequest.getDepartmentName());
+        if (departmentOptional.isPresent()) {
             throw new RecordAlreadyExistsException(ResponseMessage.RECORD_ALREADY_EXIST);
         }
-        final Company company1 = departmentMapper.mapDtoToEntity(companyDetailsRequest);
+        final Department department = departmentMapper.mapDtoToEntity(departmentDetailsRequest);
 
-        saveDepartment(company1);
-        final CompanyDetailsResponse companyDetailsResponse = departmentMapper.mapEntityToResponse(company1);
+        saveDepartment(department);
+        final DepartmentDetailsResponse departmentDetailsResponse = departmentMapper.mapEntityToResponse(department);
 
-        return companyDetailsResponse;
+        return departmentDetailsResponse;
     }
 
     private <T> void validateRequest(final T request) {
@@ -61,39 +62,41 @@ private final DepartmentMapper departmentMapper;
     }
 
     @Transactional
-    public void saveDepartment(final Company company) {
-        companyRepository.save(company);
+    public void saveDepartment(final Department department) {
+        department.setCreatedBy("Abc");
+        department.setCreatedDate(getCurrentDate());
+        departmentRepository.save(department);
     }
 
     @Override
-    public CompanyDetailsResponse editDepartmentDetails(CompanyDetailsRequest companyDetailsRequest) {
+    public DepartmentDetailsResponse editDepartmentDetails(DepartmentDetailsRequest departmentDetailsRequest) {
 
-        Optional<Company> company =
-                companyRepository.findByCompanyName(companyDetailsRequest.getCompanyName());
-        if (company.isEmpty())
+        Optional<Department> departmentOptional =
+                departmentRepository.findByDepartmentName(departmentDetailsRequest.getDepartmentName());
+        if (departmentOptional.isEmpty())
             throw new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND);
 
-        final Company company1 = company.get();
+        final Department department = departmentOptional.get();
 
-        editDepartment(company1,companyDetailsRequest);
-        final CompanyDetailsResponse companyDetailsResponse = departmentMapper.mapEntityToResponse(company1);
-        return companyDetailsResponse;
+        editDepartment(department,departmentDetailsRequest);
+        final DepartmentDetailsResponse departmentDetailsResponse = departmentMapper.mapEntityToResponse(department);
+        return departmentDetailsResponse;
     }
 
     @Transactional
-    public void editDepartment(Company company, CompanyDetailsRequest companyDetailsRequest) {
-        company.setCompanyName(companyDetailsRequest.getCompanyName());
-        company.setAddress(companyDetailsRequest.getAddress());
-        company.setContactPerson(companyDetailsRequest.getContactPerson());
-        company.setContactMobile(companyDetailsRequest.getContactMobile());
-        company.setEmailAddress(companyDetailsRequest.getEmailAddress());
-        company.setBillingNumber(companyDetailsRequest.getBillingNumber());
-        company.setBillingAmount(companyDetailsRequest.getBillingAmount());
-        company.setDailyAmount(companyDetailsRequest.getDailyAmount());
-        company.setIsEnableCharging(companyDetailsRequest.getIsEnableCharging());
-        company.setLogo(companyDetailsRequest.getLogo());
-        company.setRemarks(companyDetailsRequest.getRemarks());
-        companyRepository.save(company);
+    public void editDepartment(Department department, DepartmentDetailsRequest departmentDetailsRequest) {
+        department.setDepartmentName(departmentDetailsRequest.getDepartmentName());
+        department.setCompanyId(departmentDetailsRequest.getCompanyId());
+        department.setCompanyName(departmentDetailsRequest.getCompanyName());
+        department.setParentId(departmentDetailsRequest.getParentId());
+        department.setDeptHeadUserId(departmentDetailsRequest.getDeptHeadUserId());
+        department.setDeptHeadEmployeeId(departmentDetailsRequest.getDeptHeadEmployeeId());
+        department.setDeptHeadCategoryId(departmentDetailsRequest.getDeptHeadCategoryId());
+        department.setDeptHeadCategoryName(departmentDetailsRequest.getDeptHeadCategoryName());
+        department.setRemarks(departmentDetailsRequest.getRemarks());
+        department.setUpdatedBy("Def");
+        department.setUpdatedDate(getCurrentDate());
+        departmentRepository.save(department);
     }
 
     @Override
@@ -113,7 +116,7 @@ private final DepartmentMapper departmentMapper;
                         pageable
                 )
                 .map(companyDetails -> {
-                    final CompanyDetailsResponse companyDetailsResponse = departmentMapper.mapEntityToResponse(companyDetails);
+                    final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(companyDetails);
                    /* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
                     transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*/
                     return companyDetailsResponse;
@@ -122,5 +125,8 @@ private final DepartmentMapper departmentMapper;
         return page.getContent().isEmpty() ?
                 PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+    }
+    public Date getCurrentDate() {
+        return new Date();
     }
 }

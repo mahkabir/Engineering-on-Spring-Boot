@@ -1,8 +1,6 @@
 package com.mhk.eosb_validation_error_handling.designation.service;
 
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.PageUtils;
-import com.mhk.eosb_validation_error_handling.company.management.domain.entity.Company;
-import com.mhk.eosb_validation_error_handling.company.management.domain.request.CompanyDetailsRequest;
 import com.mhk.eosb_validation_error_handling.company.management.domain.request.PaginationRequest;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
@@ -10,8 +8,13 @@ import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseM
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.InvalidRequestDataException;
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.RecordAlreadyExistsException;
 import com.mhk.eosb_validation_error_handling.company.management.exceptions.RecordNotFoundException;
-import com.mhk.eosb_validation_error_handling.department.repository.CompanyRepository;
+import com.mhk.eosb_validation_error_handling.company.management.mapper.CompanyMapper;
+import com.mhk.eosb_validation_error_handling.company.management.repository.CompanyRepository;
+import com.mhk.eosb_validation_error_handling.designation.entity.Designation;
 import com.mhk.eosb_validation_error_handling.designation.mapper.DesignationMapper;
+import com.mhk.eosb_validation_error_handling.designation.repo.DesignationRepository;
+import com.mhk.eosb_validation_error_handling.designation.request.DesignationDetailsRequest;
+import com.mhk.eosb_validation_error_handling.designation.response.DesignationDetailsResponse;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,27 +30,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DesignationManagementService implements IDesignationManagementService {
 private final CompanyRepository companyRepository;
+private final DesignationRepository designationRepository;
 private static final String PHONE_NUMBER_VALID_REGEX = "[0-9]+";
+private final CompanyMapper companyMapper;
 private final DesignationMapper designationMapper;
 
     @Override
-    public CompanyDetailsResponse saveDesignationDetails(final CompanyDetailsRequest companyDetailsRequest) {
-        validateRequest(companyDetailsRequest);
-        if (StringUtils.isNotEmpty(companyDetailsRequest.getContactMobile()) &&
-                !isValidPhoneNumber(companyDetailsRequest.getContactMobile(), PHONE_NUMBER_VALID_REGEX)) {
-            throw new InvalidRequestDataException(ResponseMessage.INVALID_PHONE_NUMBER);
-        }
-        Optional<Company> company =
-                companyRepository.findByCompanyName(companyDetailsRequest.getCompanyName());
-        if (company.isPresent()) {
+    public DesignationDetailsResponse saveDesignationDetails(final DesignationDetailsRequest designationDetailsRequest) {
+        validateRequest(designationDetailsRequest);
+        Optional<Designation> designationOptional =
+                designationRepository.findByDesignationName(designationDetailsRequest.getDesignationName());
+        if (designationOptional.isPresent()) {
             throw new RecordAlreadyExistsException(ResponseMessage.RECORD_ALREADY_EXIST);
         }
-        final Company company1 = designationMapper.mapDtoToEntity(companyDetailsRequest);
+        final Designation designation = designationMapper.mapDtoToEntity(designationDetailsRequest);
 
-        saveDesignation(company1);
-        final CompanyDetailsResponse companyDetailsResponse = designationMapper.mapEntityToResponse(company1);
+        saveDesignation(designation);
+        final DesignationDetailsResponse designationDetailsResponse = designationMapper.mapEntityToResponse(designation);
 
-        return companyDetailsResponse;
+        return designationDetailsResponse;
     }
 
     private <T> void validateRequest(final T request) {
@@ -60,39 +62,36 @@ private final DesignationMapper designationMapper;
     }
 
     @Transactional
-    public void saveDesignation(final Company company) {
-        companyRepository.save(company);
+    public void saveDesignation(final Designation designation) {
+        designation.setCreatedBy("Abc");
+        designation.setCreatedDate(getCurrentDate());
+        designationRepository.save(designation);
     }
 
     @Override
-    public CompanyDetailsResponse editDesignationDetails(CompanyDetailsRequest companyDetailsRequest) {
+    public DesignationDetailsResponse editDesignationDetails(DesignationDetailsRequest designationDetailsRequest) {
 
-        Optional<Company> company =
-                companyRepository.findByCompanyName(companyDetailsRequest.getCompanyName());
-        if (company.isEmpty())
+        Optional<Designation> designationOptional =
+                designationRepository.findByDesignationName(designationDetailsRequest.getDesignationName());
+        if (designationOptional.isEmpty())
             throw new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND);
 
-        final Company company1 = company.get();
+        final Designation designation = designationOptional.get();
 
-        editDesignation(company1,companyDetailsRequest);
-        final CompanyDetailsResponse companyDetailsResponse = designationMapper.mapEntityToResponse(company1);
-        return companyDetailsResponse;
+        editDesignation(designation,designationDetailsRequest);
+        final DesignationDetailsResponse designationDetailsResponse = designationMapper.mapEntityToResponse(designation);
+        return designationDetailsResponse;
     }
 
     @Transactional
-    public void editDesignation(Company company, CompanyDetailsRequest companyDetailsRequest) {
-        company.setCompanyName(companyDetailsRequest.getCompanyName());
-        company.setAddress(companyDetailsRequest.getAddress());
-        company.setContactPerson(companyDetailsRequest.getContactPerson());
-        company.setContactMobile(companyDetailsRequest.getContactMobile());
-        company.setEmailAddress(companyDetailsRequest.getEmailAddress());
-        company.setBillingNumber(companyDetailsRequest.getBillingNumber());
-        company.setBillingAmount(companyDetailsRequest.getBillingAmount());
-        company.setDailyAmount(companyDetailsRequest.getDailyAmount());
-        company.setIsEnableCharging(companyDetailsRequest.getIsEnableCharging());
-        company.setLogo(companyDetailsRequest.getLogo());
-        company.setRemarks(companyDetailsRequest.getRemarks());
-        companyRepository.save(company);
+    public void editDesignation(Designation designation, DesignationDetailsRequest designationDetailsRequest) {
+        designation.setDesignationName(designationDetailsRequest.getDesignationName());
+        designation.setCompanyId(designationDetailsRequest.getCompanyId());
+        designation.setCompanyName(designationDetailsRequest.getCompanyName());
+        designation.setRemarks(designationDetailsRequest.getRemarks());
+        designation.setUpdatedBy("Def");
+        designation.setUpdatedDate(getCurrentDate());
+        designationRepository.save(designation);
     }
 
     @Override
@@ -112,7 +111,7 @@ private final DesignationMapper designationMapper;
                         pageable
                 )
                 .map(companyDetails -> {
-                    final CompanyDetailsResponse companyDetailsResponse = designationMapper.mapEntityToResponse(companyDetails);
+                    final CompanyDetailsResponse companyDetailsResponse = companyMapper.mapEntityToResponse(companyDetails);
                    /* final String iconPath = fileServerService.getImageFullPathWithoutTimeToken(transactionFeatureResponse.getTransactionFeatureIcon());
                     transactionFeatureResponse.setTransactionFeatureIcon(iconPath);*/
                     return companyDetailsResponse;
@@ -121,5 +120,9 @@ private final DesignationMapper designationMapper;
         return page.getContent().isEmpty() ?
                 PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+    }
+
+    public Date getCurrentDate() {
+        return new Date();
     }
 }

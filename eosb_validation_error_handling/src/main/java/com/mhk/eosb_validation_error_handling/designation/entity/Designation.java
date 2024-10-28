@@ -15,8 +15,8 @@ public class Designation extends BaseEntity {
     @Column(name = "ID", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
-    private String name;
+    @Column(name = "DESIGNATION_NAME", nullable = false)
+    private String designationName;
 
     @Column(name = "COMPANY_ID", nullable = false)
     private Long companyId;

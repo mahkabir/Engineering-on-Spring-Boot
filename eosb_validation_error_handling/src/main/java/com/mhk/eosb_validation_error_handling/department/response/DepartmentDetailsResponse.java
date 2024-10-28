@@ -10,7 +10,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class DepartmentDetailsResponse {
 
-    private String name;
+    private String departmentName;
     private Long companyId;
     private String companyName;
     private String remarks;
