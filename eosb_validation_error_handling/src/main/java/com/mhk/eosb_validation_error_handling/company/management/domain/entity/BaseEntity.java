@@ -1,9 +1,6 @@
 package com.mhk.eosb_validation_error_handling.company.management.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -34,8 +31,10 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "APPROVED_DATE")
     private Date approvedDate;
 
-    @Column(name = "STATUS")
-    private String status;
+    @Column(name = "IS_ACTIVE")
+    private Boolean isActive = Boolean.TRUE;
+
+    @Version
     private Long version;
 
     @Column(name = "ddl_version")
