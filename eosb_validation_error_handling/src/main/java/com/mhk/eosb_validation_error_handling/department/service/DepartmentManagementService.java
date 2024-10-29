@@ -107,9 +107,6 @@ private final CompanyMapper companyMapper;
         return getDepartmentDetailsPaginationResponse(pageNumber, pageSize, sortBy, sortOrder,departmentName, companyName, fromDate, toDate);
 
     }
-    public Date getCurrentDate() {
-        return new Date();
-    }
 
     private PaginationResponse<DepartmentDetailsResponse> getDepartmentDetailsPaginationResponse(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String departmentName, String companyName, Date fromDate, Date toDate) {
 
@@ -128,4 +125,15 @@ private final CompanyMapper companyMapper;
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);
 
     }
+    @Override
+    public DepartmentDetailsResponse getDepartmentDetails(Long departmentId) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow( ()-> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND) );
+        return departmentMapper.mapEntityToResponse(department);
+    }
+
+    public Date getCurrentDate() {
+        return new Date();
+    }
+
 }

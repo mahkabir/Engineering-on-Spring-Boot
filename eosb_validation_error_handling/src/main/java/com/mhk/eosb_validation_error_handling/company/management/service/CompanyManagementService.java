@@ -129,6 +129,7 @@ private final CompanyMapper companyMapper;
         return getCompanyDetailsPaginationResponse(pageNumber, pageSize, sortBy, sortOrder,companyName, contactMobile, fromDate, toDate);
     }
 
+
     private PaginationResponse<CompanyDetailsResponse> getCompanyDetailsPaginationResponse(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder,String companyName, String contactMobile, Date fromDate, Date toDate) {
 
         PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
@@ -145,6 +146,13 @@ private final CompanyMapper companyMapper;
         return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);
 
+    }
+
+    @Override
+    public CompanyDetailsResponse getCompanyDetails(Long companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND));
+        return companyMapper.mapEntityToResponse(company);
     }
 
     public Date getCurrentDate() {

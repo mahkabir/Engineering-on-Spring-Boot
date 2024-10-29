@@ -122,6 +122,12 @@ private final DesignationMapper designationMapper;
                 PageUtils.mapToPaginationResponseDto(page, paginationRequest);*/
         return null;
     }
+    @Override
+    public DesignationDetailsResponse getDesignationDetails(Long designationId) {
+        Designation designation = designationRepository.findById(designationId)
+                .orElseThrow( ()-> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND) );
+        return designationMapper.mapEntityToResponse(designation);
+    }
 
     public Date getCurrentDate() {
         return new Date();

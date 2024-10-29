@@ -18,6 +18,7 @@ public interface ICompanyManagementService {
                                                                       String contactMobile,
                                                                       Date fromDate,
                                                                       Date toDate );
+    CompanyDetailsResponse getCompanyDetails(Long companyId);
 
 
 

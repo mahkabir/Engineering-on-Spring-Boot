@@ -44,4 +44,10 @@ public class DesignationResource {
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
     }
 
+    @GetMapping("/designation-details/{designationId}")
+    public ApiResponse<DesignationDetailsResponse> getDesignationDetailsById(@PathVariable Long designationId) {
+        return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
+                iDesignationManagementService.getDesignationDetails(designationId));
+    }
+
 }

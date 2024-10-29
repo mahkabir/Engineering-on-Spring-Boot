@@ -47,4 +47,10 @@ public class CompanyController {
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
     }
 
+    @GetMapping("/company-details/{companyId}")
+    public ApiResponse<CompanyDetailsResponse> getCompanyDetailsById(@PathVariable Long companyId) {
+        return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
+                iCompanyManagementService.getCompanyDetails(companyId));
+    }
+
 }

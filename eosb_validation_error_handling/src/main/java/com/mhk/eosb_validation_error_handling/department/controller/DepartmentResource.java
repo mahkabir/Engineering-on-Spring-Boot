@@ -2,6 +2,7 @@ package com.mhk.eosb_validation_error_handling.department.controller;
 
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.ApiResponse;
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.ResponseUtils;
+import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseMessage;
 import com.mhk.eosb_validation_error_handling.department.request.DepartmentDetailsRequest;
@@ -45,6 +46,12 @@ public class DepartmentResource {
         final PaginationResponse<DepartmentDetailsResponse> response =
                 iDepartmentManagementService.getAllDepartments(pageNumber, pageSize, sortBy, sortOrder, departmentName, companyName, fromDate, toDate);
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
+    }
+
+    @GetMapping("/department-details/{departmentId}")
+    public ApiResponse<DepartmentDetailsResponse> getDepartmentDetailsById(@PathVariable Long departmentId) {
+        return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
+                iDepartmentManagementService.getDepartmentDetails(departmentId));
     }
 
 }

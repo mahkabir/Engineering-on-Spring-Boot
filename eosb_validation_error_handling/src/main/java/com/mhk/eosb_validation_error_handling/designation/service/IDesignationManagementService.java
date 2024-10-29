@@ -16,6 +16,7 @@ public interface IDesignationManagementService {
                                                                       String sortOrder,
                                                                       String companyName,
                                                                       String contactMobile);
+    DesignationDetailsResponse getDesignationDetails(Long designationId);
 
 
 

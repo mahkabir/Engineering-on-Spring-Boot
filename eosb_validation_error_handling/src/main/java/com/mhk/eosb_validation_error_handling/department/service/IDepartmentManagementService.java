@@ -20,6 +20,7 @@ public interface IDepartmentManagementService {
                                                                       String companyName,
                                                                       Date fromDate,
                                                                       Date toDate);
+    DepartmentDetailsResponse getDepartmentDetails(Long departmentId);
 
 
 
