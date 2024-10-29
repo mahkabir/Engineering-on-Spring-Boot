@@ -1,7 +1,5 @@
 package com.mhk.eosb_validation_error_handling.user.repo;
 
-import com.mhk.eosb_validation_error_handling.department.entity.Department;
-import com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse;
 import com.mhk.eosb_validation_error_handling.user.entity.User;
 import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
 import org.springframework.data.domain.Page;
@@ -15,23 +13,46 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByDepartmentName(String departmentName);
+    Optional<User> findByuserName(String userName);
 
     @Query("select new com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse(" +
+            "d.userName, " +
+            "d.employeeId, " +
+            "d.userFullName, " +
+            "d.msisdn, " +
+            "d.contactNo, " +
+            "d.mailId, " +
+            "d.departmentId, " +
             "d.departmentName, " +
+            "d.designationId, " +
+            "d.designationName, " +
+            "d.userIsLock, " +
+            "d.isRobiEmployee, " +
+            "d.userCreatedById, " +
+            "d.isNew, " +
+            "d.loginCount, " +
+            "d.userEditedById, " +
             "d.companyId, " +
             "d.companyName, " +
-            "d.remarks, " +
-            "d.parentId, " +
-            "d.deptHeadUserId, " +
-            "d.deptHeadEmployeeId, " +
-            "d.deptHeadCategoryId, " +
-            "d.deptHeadCategoryName) " +
+            "d.address, " +
+            "d.comments, " +
+            "d.canLogin, " +
+            "d.trackingEnable, " +
+            "d.isSuperAdmin, " +
+            "d.fkSessionId, " +
+            "d.fkLoginTime, " +
+            "d.lastPasswordChangeTime, " +
+            "d.areaId, " +
+            "d.areaName, " +
+            "d.groupName, " +
+            "d.isEnableCharging, " +
+            "d.disabledTrackingDate) " +
             "from User d " +
-            "where (:departmentName is null or d.departmentName = :departmentName) and " +
-            "(:companyName is null or d.companyName = :companyName)" )
-    Page<UserDetailsResponse> findAllByParam(String departmentName,
+            "where (:username is null or d.userName = :username) and " +
+            "(:companyName is null or d.companyName = :companyName)")
+    Page<UserDetailsResponse> findAllByParam(String username,
                                              String companyName,
                                              Pageable pageable);
+
 
 }

@@ -27,7 +27,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
             "d.deptHeadEmployeeId, " +
             "d.deptHeadCategoryId, " +
             "d.deptHeadCategoryName) " +
-            "from User d " +
+            "from Department d " +
             "where (:departmentName is null or d.departmentName = :departmentName) and " +
             "(:companyName is null or d.companyName = :companyName)" )
     Page<DepartmentDetailsResponse> findAllByParam(String departmentName,

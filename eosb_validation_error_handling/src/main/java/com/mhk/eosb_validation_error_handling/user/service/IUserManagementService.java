@@ -16,7 +16,7 @@ public interface IUserManagementService {
                                                                       Integer pageSize,
                                                                       String sortBy,
                                                                       String sortOrder,
-                                                                      String departmentName,
+                                                                      String userName,
                                                                       String companyName,
                                                                       Date fromDate,
                                                                       Date toDate);

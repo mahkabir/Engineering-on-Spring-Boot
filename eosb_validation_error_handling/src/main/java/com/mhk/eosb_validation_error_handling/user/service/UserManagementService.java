@@ -42,7 +42,7 @@ private final UserRepository userRepository;
     public UserDetailsResponse saveUserDetails(final UserDetailsRequest userDetailsRequest) {
         validateRequest(userDetailsRequest);
         Optional<User> userOptional =
-                userRepository.findByDepartmentName(userDetailsRequest.getDepartmentName());
+                userRepository.findByuserName(userDetailsRequest.getUserName());
         if (userOptional.isPresent()) {
             throw new RecordAlreadyExistsException(ResponseMessage.RECORD_ALREADY_EXIST);
         }
@@ -75,7 +75,7 @@ private final UserRepository userRepository;
     public UserDetailsResponse editUserDetails(UserDetailsRequest userDetailsRequest) {
 
         Optional<User> userOptional =
-                userRepository.findByDepartmentName(userDetailsRequest.getDepartmentName());
+                userRepository.findByuserName(userDetailsRequest.getUserName());
         if (userOptional.isEmpty())
             throw new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND);
 
@@ -88,15 +88,37 @@ private final UserRepository userRepository;
 
     @Transactional
     public void editUser(User user, UserDetailsRequest userDetailsRequest) {
+        user.setUserName(userDetailsRequest.getUserName());
+        user.setEmployeeId(userDetailsRequest.getEmployeeId());
+        user.setUserFullName(userDetailsRequest.getUserFullName());
+        user.setMsisdn(userDetailsRequest.getMsisdn());
+        user.setContactNo(userDetailsRequest.getContactNo());
+        user.setMailId(userDetailsRequest.getMailId());
+        user.setDepartmentId(userDetailsRequest.getDepartmentId());
         user.setDepartmentName(userDetailsRequest.getDepartmentName());
+        user.setDesignationId(userDetailsRequest.getDesignationId());
+        user.setDesignationName(userDetailsRequest.getDesignationName());
+        user.setUserIsLock(userDetailsRequest.getUserIsLock());
+        user.setIsRobiEmployee(userDetailsRequest.getIsRobiEmployee());
+        user.setUserCreatedById(userDetailsRequest.getUserCreatedById());
+        user.setIsNew(userDetailsRequest.getIsNew());
+        user.setLoginCount(userDetailsRequest.getLoginCount());
+        user.setUserEditedById(userDetailsRequest.getUserEditedById());
         user.setCompanyId(userDetailsRequest.getCompanyId());
         user.setCompanyName(userDetailsRequest.getCompanyName());
-        user.setParentId(userDetailsRequest.getParentId());
-        user.setDeptHeadUserId(userDetailsRequest.getDeptHeadUserId());
-        user.setDeptHeadEmployeeId(userDetailsRequest.getDeptHeadEmployeeId());
-        user.setDeptHeadCategoryId(userDetailsRequest.getDeptHeadCategoryId());
-        user.setDeptHeadCategoryName(userDetailsRequest.getDeptHeadCategoryName());
-        user.setRemarks(userDetailsRequest.getRemarks());
+        user.setAddress(userDetailsRequest.getAddress());
+        user.setComments(userDetailsRequest.getComments());
+        user.setCanLogin(userDetailsRequest.getCanLogin());
+        user.setTrackingEnable(userDetailsRequest.getTrackingEnable());
+        user.setIsSuperAdmin(userDetailsRequest.getIsSuperAdmin());
+        user.setFkSessionId(userDetailsRequest.getFkSessionId());
+        user.setFkLoginTime(userDetailsRequest.getFkLoginTime());
+        user.setLastPasswordChangeTime(userDetailsRequest.getLastPasswordChangeTime());
+        user.setAreaId(userDetailsRequest.getAreaId());
+        user.setAreaName(userDetailsRequest.getAreaName());
+        user.setGroupName(userDetailsRequest.getGroupName());
+        user.setIsEnableCharging(userDetailsRequest.getIsEnableCharging());
+        user.setDisabledTrackingDate(userDetailsRequest.getDisabledTrackingDate());
         user.setUpdatedBy("Def");
         user.setUpdatedDate(getCurrentDate());
         userRepository.save(user);
@@ -104,13 +126,13 @@ private final UserRepository userRepository;
 
     @Override
     @Transactional
-    public PaginationResponse<UserDetailsResponse> getAllUsers(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String departmentName, String companyName, Date fromDate, Date toDate) {
+    public PaginationResponse<UserDetailsResponse> getAllUsers(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String userName, String companyName, Date fromDate, Date toDate) {
 
-        return getUserDetailsPaginationResponse(pageNumber, pageSize, sortBy, sortOrder,departmentName, companyName, fromDate, toDate);
+        return getUserDetailsPaginationResponse(pageNumber, pageSize, sortBy, sortOrder,userName, companyName, fromDate, toDate);
 
     }
 
-    private PaginationResponse<UserDetailsResponse> getUserDetailsPaginationResponse(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String departmentName, String companyName, Date fromDate, Date toDate) {
+    private PaginationResponse<UserDetailsResponse> getUserDetailsPaginationResponse(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, String userName, String companyName, Date fromDate, Date toDate) {
 
         PaginationRequest paginationRequest = PageUtils.mapToPaginationRequest(pageNumber, pageSize, sortBy, sortOrder);
         Pageable pageable = PageUtils.getPageable(paginationRequest);
@@ -119,7 +141,7 @@ private final UserRepository userRepository;
         String endDate = Objects.isNull(toDate) ? null : DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1),
                 "yyyy-MM-dd");
 
-        Page<UserDetailsResponse> page = userRepository.findAllByParam(departmentName, companyName, pageable);
+        Page<UserDetailsResponse> page = userRepository.findAllByParam(userName, companyName, pageable);
 
         //List<CompanyDetailsResponse> transactionHistoryList = page.getContent();
 

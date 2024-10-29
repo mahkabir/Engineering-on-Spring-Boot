@@ -1,6 +1,6 @@
 package com.mhk.eosb_validation_error_handling.company.management.domain.request;
 
-import com.mhk.eosb_validation_error_handling.company.management.annotations.BdPhoneNumber;
+import com.mhk.eosb_validation_error_handling.company.management.annotations.BDPhoneNumber;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -24,7 +24,7 @@ public class CompanyDetailsRequest {
 
     @NotBlank(message = "Contact mobile is required")
   //  @Pattern(regexp = "(\\+88)?01[3-9]\\d{8}", message = "Found invalid phone number")
-    @BdPhoneNumber(message = "Found invalid phone number")
+    @BDPhoneNumber(message = "Found invalid phone number")
     private String contactMobile;
 
     @Email(message = "Email address is invalid")

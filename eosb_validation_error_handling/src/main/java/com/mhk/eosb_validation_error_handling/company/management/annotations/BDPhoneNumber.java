@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = BdPhoneNumberValidator.class)
-public @interface BdPhoneNumber {
+public @interface BDPhoneNumber {
 
     String message() default "Invalid Bangladeshi Phone Number";
 
