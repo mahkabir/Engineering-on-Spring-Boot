@@ -1,9 +1,9 @@
-package com.mhk.eosb_validation_error_handling.department.repo;
+package com.mhk.eosb_validation_error_handling.user.repo;
 
-import com.mhk.eosb_validation_error_handling.company.management.domain.entity.Company;
-import com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse;
 import com.mhk.eosb_validation_error_handling.department.entity.Department;
 import com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse;
+import com.mhk.eosb_validation_error_handling.user.entity.User;
+import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface DepartmentRepository extends JpaRepository<Department, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<Department> findByDepartmentName(String departmentName);
+    Optional<User> findByDepartmentName(String departmentName);
 
-    @Query("select new com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse(" +
+    @Query("select new com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse(" +
             "d.departmentName, " +
             "d.companyId, " +
             "d.companyName, " +
@@ -30,8 +30,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
             "from User d " +
             "where (:departmentName is null or d.departmentName = :departmentName) and " +
             "(:companyName is null or d.companyName = :companyName)" )
-    Page<DepartmentDetailsResponse> findAllByParam(String departmentName,
-                                                   String companyName,
-                                                   Pageable pageable);
+    Page<UserDetailsResponse> findAllByParam(String departmentName,
+                                             String companyName,
+                                             Pageable pageable);
 
 }
