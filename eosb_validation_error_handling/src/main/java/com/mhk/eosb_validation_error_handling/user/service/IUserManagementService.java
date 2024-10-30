@@ -18,7 +18,7 @@ public interface IUserManagementService {
                                                                       String companyName,
                                                                       Date fromDate,
                                                                       Date toDate);
-    UserDetailsResponse getUserDetails(Long userId);
+    UserDetailsResponse getUserDetails(Long Id);
 
 
 

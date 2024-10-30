@@ -1,5 +1,8 @@
 package com.mhk.eosb_validation_error_handling.employeeMsisdn.mapper;
 
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.entity.EmployeeMsisdn;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.request.EmployeeMsisdnDetailsRequest;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import com.mhk.eosb_validation_error_handling.user.entity.User;
 import com.mhk.eosb_validation_error_handling.user.request.UserDetailsRequest;
 import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
@@ -8,42 +11,42 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface EmployeeMsisdnMapper {
 
-    default UserDetailsResponse mapEntityToResponse(final User user) {
-        UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
-        userDetailsResponse.setUserName(user.getUserName());
-        userDetailsResponse.setEmployeeId(user.getEmployeeId());
-        userDetailsResponse.setUserFullName(user.getUserFullName());
-        userDetailsResponse.setMsisdn(user.getMsisdn());
-        userDetailsResponse.setContactNo(user.getContactNo());
-        userDetailsResponse.setMailId(user.getMailId());
-        userDetailsResponse.setDepartmentId(user.getDepartmentId());
-        userDetailsResponse.setDepartmentName(user.getDepartmentName());
-        userDetailsResponse.setDesignationId(user.getDesignationId());
-        userDetailsResponse.setDesignationName(user.getDesignationName());
-        userDetailsResponse.setUserIsLock(user.getUserIsLock());
-        userDetailsResponse.setIsRobiEmployee(user.getIsRobiEmployee());
-        userDetailsResponse.setUserCreatedById(user.getUserCreatedById());
-        userDetailsResponse.setIsNew(user.getIsNew());
-        userDetailsResponse.setLoginCount(user.getLoginCount());
-        userDetailsResponse.setUserEditedById(user.getUserEditedById());
-        userDetailsResponse.setCompanyId(user.getCompanyId());
-        userDetailsResponse.setCompanyName(user.getCompanyName());
-        userDetailsResponse.setAddress(user.getAddress());
-        userDetailsResponse.setComments(user.getComments());
-        userDetailsResponse.setCanLogin(user.getCanLogin());
-        userDetailsResponse.setTrackingEnable(user.getTrackingEnable());
-        userDetailsResponse.setIsSuperAdmin(user.getIsSuperAdmin());
-        userDetailsResponse.setFkSessionId(user.getFkSessionId());
-        userDetailsResponse.setFkLoginTime(user.getFkLoginTime());
-        userDetailsResponse.setLastPasswordChangeTime(user.getLastPasswordChangeTime());
-        userDetailsResponse.setAreaId(user.getAreaId());
-        userDetailsResponse.setAreaName(user.getAreaName());
-        userDetailsResponse.setGroupName(user.getGroupName());
-        userDetailsResponse.setIsEnableCharging(user.getIsEnableCharging());
-        userDetailsResponse.setDisabledTrackingDate(user.getDisabledTrackingDate());
-        return userDetailsResponse;
+    default EmployeeMsisdnDetailsResponse mapEntityToResponse(final EmployeeMsisdn employeeMsisdn) {
+        EmployeeMsisdnDetailsResponse employeeMsisdnDetailsResponse = new EmployeeMsisdnDetailsResponse();
+        employeeMsisdnDetailsResponse.setUserName(employeeMsisdn.getUserName());
+        employeeMsisdnDetailsResponse.setEmployeeId(employeeMsisdn.getEmployeeId());
+        employeeMsisdnDetailsResponse.setUserFullName(employeeMsisdn.getUserFullName());
+        employeeMsisdnDetailsResponse.setMsisdn(employeeMsisdn.getMsisdn());
+        employeeMsisdnDetailsResponse.setContactNo(employeeMsisdn.getContactNo());
+        employeeMsisdnDetailsResponse.setMailId(employeeMsisdn.getMailId());
+        employeeMsisdnDetailsResponse.setDepartmentId(employeeMsisdn.getDepartmentId());
+        employeeMsisdnDetailsResponse.setDepartmentName(employeeMsisdn.getDepartmentName());
+        employeeMsisdnDetailsResponse.setDesignationId(employeeMsisdn.getDesignationId());
+        employeeMsisdnDetailsResponse.setDesignationName(employeeMsisdn.getDesignationName());
+        employeeMsisdnDetailsResponse.setUserIsLock(employeeMsisdn.getUserIsLock());
+        employeeMsisdnDetailsResponse.setIsRobiEmployee(employeeMsisdn.getIsRobiEmployee());
+        employeeMsisdnDetailsResponse.setUserCreatedById(employeeMsisdn.getUserCreatedById());
+        employeeMsisdnDetailsResponse.setIsNew(employeeMsisdn.getIsNew());
+        employeeMsisdnDetailsResponse.setLoginCount(employeeMsisdn.getLoginCount());
+        employeeMsisdnDetailsResponse.setUserEditedById(employeeMsisdn.getUserEditedById());
+        employeeMsisdnDetailsResponse.setCompanyId(employeeMsisdn.getCompanyId());
+        employeeMsisdnDetailsResponse.setCompanyName(employeeMsisdn.getCompanyName());
+        employeeMsisdnDetailsResponse.setAddress(employeeMsisdn.getAddress());
+        employeeMsisdnDetailsResponse.setComments(employeeMsisdn.getComments());
+        employeeMsisdnDetailsResponse.setCanLogin(employeeMsisdn.getCanLogin());
+        employeeMsisdnDetailsResponse.setTrackingEnable(employeeMsisdn.getTrackingEnable());
+        employeeMsisdnDetailsResponse.setIsSuperAdmin(employeeMsisdn.getIsSuperAdmin());
+        employeeMsisdnDetailsResponse.setFkSessionId(employeeMsisdn.getFkSessionId());
+        employeeMsisdnDetailsResponse.setFkLoginTime(employeeMsisdn.getFkLoginTime());
+        employeeMsisdnDetailsResponse.setLastPasswordChangeTime(employeeMsisdn.getLastPasswordChangeTime());
+        employeeMsisdnDetailsResponse.setAreaId(employeeMsisdn.getAreaId());
+        employeeMsisdnDetailsResponse.setAreaName(employeeMsisdn.getAreaName());
+        employeeMsisdnDetailsResponse.setGroupName(employeeMsisdn.getGroupName());
+        employeeMsisdnDetailsResponse.setIsEnableCharging(employeeMsisdn.getIsEnableCharging());
+        employeeMsisdnDetailsResponse.setDisabledTrackingDate(employeeMsisdn.getDisabledTrackingDate());
+        return employeeMsisdnDetailsResponse;
     }
 
-    User mapDtoToEntity(final UserDetailsRequest userDetailsRequest);
+    EmployeeMsisdn mapDtoToEntity(final EmployeeMsisdnDetailsRequest employeeMsisdnDetailsRequest);
 
 }

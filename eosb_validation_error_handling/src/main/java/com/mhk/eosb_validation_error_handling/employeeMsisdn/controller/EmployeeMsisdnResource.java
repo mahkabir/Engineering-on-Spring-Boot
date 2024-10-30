@@ -4,36 +4,36 @@ import com.mhk.eosb_validation_error_handling.company.management.domain.common.A
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.ResponseUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseMessage;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.request.EmployeeMsisdnDetailsRequest;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.service.IEmployeeMsisdnManagementService;
 import com.mhk.eosb_validation_error_handling.user.request.UserDetailsRequest;
-import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
-import com.mhk.eosb_validation_error_handling.user.service.IUserManagementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Date;
 
 @RestController
-@RequestMapping( "/user-management")
+@RequestMapping( "/msisdn-management")
 @RequiredArgsConstructor
 public class EmployeeMsisdnResource {
-    private final IUserManagementService iUserManagementService;
+    private final IEmployeeMsisdnManagementService iEmployeeMsisdnManagementService;
 
-    @PostMapping("/save-user")
-    public ApiResponse<UserDetailsResponse> saveUser(@Valid @RequestBody UserDetailsRequest userDetailsRequest) {
-        final UserDetailsResponse response = iUserManagementService.saveUserDetails(userDetailsRequest);
+    @PostMapping("/save-msisdn")
+    public ApiResponse<EmployeeMsisdnDetailsResponse> saveMsisdn(@Valid @RequestBody EmployeeMsisdnDetailsRequest employeeMsisdnDetailsRequest) {
+        final EmployeeMsisdnDetailsResponse response = iEmployeeMsisdnManagementService.saveMsisdnDetails(employeeMsisdnDetailsRequest);
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
     }
 
-    @PostMapping("/edit-user")
-    public ApiResponse<UserDetailsResponse> editUser(@Valid @RequestBody UserDetailsRequest userDetailsRequest) {
-        final UserDetailsResponse response = iUserManagementService.editUserDetails(userDetailsRequest);
+    @PostMapping("/edit-msisdn")
+    public ApiResponse<EmployeeMsisdnDetailsResponse> editMsisdn(@Valid @RequestBody EmployeeMsisdnDetailsRequest employeeMsisdnDetailsRequest) {
+        final EmployeeMsisdnDetailsResponse response = iEmployeeMsisdnManagementService.editMsisdnDetails(employeeMsisdnDetailsRequest);
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
     }
 
-    @GetMapping("/user-details/all")
-    public ApiResponse<PaginationResponse<UserDetailsResponse>> getAllUserDetails(@RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+    @GetMapping("/msisdn-details/all")
+    public ApiResponse<PaginationResponse<EmployeeMsisdnDetailsResponse>> getAllMsisdnDetails(@RequestParam(required = false, defaultValue = "0") Integer pageNumber,
                                                                                              @RequestParam(required = false, defaultValue = "10") Integer pageSize,
                                                                                              @RequestParam(required = false, defaultValue = "id") String sortBy,
                                                                                              @RequestParam(required = false, defaultValue = "desc") String sortOrder,
@@ -42,15 +42,22 @@ public class EmployeeMsisdnResource {
                                                                                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
                                                                                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
 
-        final PaginationResponse<UserDetailsResponse> response =
-                iUserManagementService.getAllUsers(pageNumber, pageSize, sortBy, sortOrder, userName, companyName, fromDate, toDate);
+        final PaginationResponse<EmployeeMsisdnDetailsResponse> response =
+                iEmployeeMsisdnManagementService.getAllMsisdns(pageNumber, pageSize, sortBy, sortOrder, userName, companyName, fromDate, toDate);
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL), response);
     }
 
-    @GetMapping("/user-details/{userId}")
-    public ApiResponse<UserDetailsResponse> getUserDetailsById(@PathVariable Long userId) {
+    @GetMapping("/msisdn-details/{id}")
+    public ApiResponse<EmployeeMsisdnDetailsResponse> getUserDetailsById(@PathVariable Long id) {
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
-                iUserManagementService.getUserDetails(userId));
+                iEmployeeMsisdnManagementService.getMsisdnDetails(id));
     }
+
+   /* @GetMapping("/msisdn-details/{msisdn}")
+    public ApiResponse<EmployeeMsisdnDetailsResponse> getUserDetailsById(@PathVariable String msisdn) {
+        return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
+                iEmployeeMsisdnManagementService.getUserDetails(msisdn));
+    }*/
+
 
 }

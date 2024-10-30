@@ -1,16 +1,16 @@
 package com.mhk.eosb_validation_error_handling.employeeMsisdn.service;
 
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
-import com.mhk.eosb_validation_error_handling.user.request.UserDetailsRequest;
-import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.request.EmployeeMsisdnDetailsRequest;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 
 import java.util.Date;
 
 public interface IEmployeeMsisdnManagementService {
 
-    UserDetailsResponse saveUserDetails(UserDetailsRequest userDetailsRequest);
-    UserDetailsResponse editUserDetails(UserDetailsRequest userDetailsRequest);
-    PaginationResponse<UserDetailsResponse> getAllUsers(Integer pageNumber,
+    EmployeeMsisdnDetailsResponse saveMsisdnDetails(EmployeeMsisdnDetailsRequest employeeMsisdnDetailsRequest);
+    EmployeeMsisdnDetailsResponse editMsisdnDetails(EmployeeMsisdnDetailsRequest employeeMsisdnDetailsRequest);
+    PaginationResponse<EmployeeMsisdnDetailsResponse> getAllMsisdns(Integer pageNumber,
                                                                       Integer pageSize,
                                                                       String sortBy,
                                                                       String sortOrder,
@@ -18,7 +18,7 @@ public interface IEmployeeMsisdnManagementService {
                                                                       String companyName,
                                                                       Date fromDate,
                                                                       Date toDate);
-    UserDetailsResponse getUserDetails(Long userId);
+    EmployeeMsisdnDetailsResponse getMsisdnDetails(Long userId);
 
 
 
