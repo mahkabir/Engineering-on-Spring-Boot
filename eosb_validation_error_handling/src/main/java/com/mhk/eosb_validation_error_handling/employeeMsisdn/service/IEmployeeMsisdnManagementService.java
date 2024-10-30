@@ -1,4 +1,4 @@
-package com.mhk.eosb_validation_error_handling.user.service;
+package com.mhk.eosb_validation_error_handling.employeeMsisdn.service;
 
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 import com.mhk.eosb_validation_error_handling.user.request.UserDetailsRequest;
@@ -6,7 +6,7 @@ import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
 
 import java.util.Date;
 
-public interface IUserManagementService {
+public interface IEmployeeMsisdnManagementService {
 
     UserDetailsResponse saveUserDetails(UserDetailsRequest userDetailsRequest);
     UserDetailsResponse editUserDetails(UserDetailsRequest userDetailsRequest);
