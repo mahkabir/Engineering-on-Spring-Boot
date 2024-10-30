@@ -17,22 +17,25 @@ public class User extends BaseEntity {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "USER_NAME", nullable = false, unique = true)
+    @Column(name = "USERID")
+    private Long userId;
+
+    @Column(name = "USERNAME", nullable = false, unique = true)
     private String userName;
 
     @Column(name = "EMPLOYEE_ID")
     private String employeeId;
 
-    @Column(name = "USER_FULL_NAME", length = 500)
+    @Column(name = "USERFULLNAME", length = 500)
     private String userFullName;
 
     @Column(name = "MSISDN", nullable = false)
     private String msisdn;
 
-    @Column(name = "CONTACT_NO")
+    @Column(name = "CONTACTNO")
     private String contactNo;
 
-    @Column(name = "MAIL_ID")
+    @Column(name = "MAILID")
     private String mailId;
 
     @Column(name = "PASSWORD", length = 500)
@@ -53,11 +56,20 @@ public class User extends BaseEntity {
     @Column(name = "USER_IS_LOCK")
     private Boolean userIsLock;
 
+    @Column(name = "USER_IS_ACTIVE")
+    private Short userIsActive;
+
     @Column(name = "IS_ROBI_EMPLOYEE")
     private Boolean isRobiEmployee;
 
+    @Column(name = "USER_CREATED_BY_NAME", length = 500)
+    private String userCreatedByName;
+
     @Column(name = "USER_CREATED_BY_ID")
     private Long userCreatedById;
+
+    @Column(name = "USER_CREATED_DATE")
+    private Date userCreatedDate;
 
     @Column(name = "IS_NEW")
     private Boolean isNew;
@@ -65,8 +77,14 @@ public class User extends BaseEntity {
     @Column(name = "LOGIN_COUNT")
     private Integer loginCount;
 
+    @Column(name = "UPDATED_AT")
+    private Date updatedAt;
+
     @Column(name = "USER_EDITED_BY_ID")
     private Long userEditedById;
+
+    @Column(name = "USER_EDITED_BY_NAME", length = 300)
+    private String userEditedByName;
 
     @Column(name = "COMPANY_ID", nullable = false)
     private Long companyId;
@@ -96,7 +114,7 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fkLoginTime;
 
-    @Column(name = "LAST_PASSWORD_CHANGE_TIME")
+    @Column(name = "LAST_PASS_CNG_TIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastPasswordChangeTime;
 
@@ -112,7 +130,7 @@ public class User extends BaseEntity {
     @Column(name = "IS_ENABLE_CHARGING")
     private Boolean isEnableCharging;
 
-    @Column(name = "DISABLED_TRACKING_DATE")
+    @Column(name = "DISABLED_TRACKING_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date disabledTrackingDate;
 }

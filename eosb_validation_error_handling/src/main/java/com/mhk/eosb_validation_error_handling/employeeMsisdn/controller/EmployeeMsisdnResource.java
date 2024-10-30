@@ -7,7 +7,6 @@ import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseM
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.request.EmployeeMsisdnDetailsRequest;
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.service.IEmployeeMsisdnManagementService;
-import com.mhk.eosb_validation_error_handling.user.request.UserDetailsRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;

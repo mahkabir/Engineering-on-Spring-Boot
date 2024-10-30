@@ -22,13 +22,13 @@ public class Company extends BaseEntity {
     @Column(name = "ADDRESS")
     private String address;
 
-    @Column(name = "CONTACT_PERSON")
+    @Column(name = "CONTACT_MOBILE")
     private String contactPerson;
 
     @Column(name = "CONTACT_MOBILE")
     private String contactMobile;
 
-    @Column(name = "EMAIL_ADDRESS")
+    @Column(name = "CONTACT_EMAIL")
     private String emailAddress;
 
     @Column(name = "BILLING_NUMBER")
