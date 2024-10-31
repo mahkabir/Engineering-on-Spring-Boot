@@ -17,7 +17,7 @@ public interface EmployeeMsisdnRepository extends JpaRepository<EmployeeMsisdn, 
 
     Optional<EmployeeMsisdn> findByuserName(String userName);
 
-    @Query("select new com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse(" +
+   /* @Query("select new com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse(" +
             "em.userName, " +
             "em.employeeId, " +
             "em.userFullName, " +
@@ -54,7 +54,7 @@ public interface EmployeeMsisdnRepository extends JpaRepository<EmployeeMsisdn, 
             "(:companyName is null or em.companyName = :companyName)")
     Page<EmployeeMsisdnDetailsResponse> findAllByParam(String username,
                                                        String companyName,
-                                                       Pageable pageable);
+                                                       Pageable pageable);*/
 
 
 }

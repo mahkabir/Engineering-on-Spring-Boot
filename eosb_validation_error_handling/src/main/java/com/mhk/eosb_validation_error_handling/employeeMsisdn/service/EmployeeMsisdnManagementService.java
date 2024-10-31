@@ -16,18 +16,20 @@ import com.mhk.eosb_validation_error_handling.employeeMsisdn.entity.EmployeeMsis
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.mapper.EmployeeMsisdnMapper;
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.repo.EmployeeMsisdnRepository;
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.request.EmployeeMsisdnDetailsRequest;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.request.EmployeeMsisdnDetailsRequestExcelData;
 import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import com.mhk.eosb_validation_error_handling.user.mapper.UserMapper;
 import com.mhk.eosb_validation_error_handling.user.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.io.InputStream;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -114,10 +116,10 @@ private final EmployeeMsisdnRepository employeeMsisdnRepository;
         employeeMsisdn.setComments(employeeMsisdnDetailsRequest.getComments());
         employeeMsisdn.setCanLogin(employeeMsisdnDetailsRequest.getCanLogin());
         employeeMsisdn.setTrackingEnable(employeeMsisdnDetailsRequest.getTrackingEnable());
-        employeeMsisdn.setIsSuperAdmin(employeeMsisdnDetailsRequest.getIsSuperAdmin());
-        employeeMsisdn.setFkSessionId(employeeMsisdnDetailsRequest.getFkSessionId());
-        employeeMsisdn.setFkLoginTime(employeeMsisdnDetailsRequest.getFkLoginTime());
-        employeeMsisdn.setLastPasswordChangeTime(employeeMsisdnDetailsRequest.getLastPasswordChangeTime());
+       // employeeMsisdn.setIsSuperAdmin(employeeMsisdnDetailsRequest.getIsSuperAdmin());
+      //  employeeMsisdn.setFkSessionId(employeeMsisdnDetailsRequest.getFkSessionId());
+       // employeeMsisdn.setFkLoginTime(employeeMsisdnDetailsRequest.getFkLoginTime());
+       // employeeMsisdn.setLastPasswordChangeTime(employeeMsisdnDetailsRequest.getLastPasswordChangeTime());
         employeeMsisdn.setAreaId(employeeMsisdnDetailsRequest.getAreaId());
         employeeMsisdn.setAreaName(employeeMsisdnDetailsRequest.getAreaName());
         employeeMsisdn.setGroupName(employeeMsisdnDetailsRequest.getGroupName());
@@ -145,12 +147,13 @@ private final EmployeeMsisdnRepository employeeMsisdnRepository;
         String endDate = Objects.isNull(toDate) ? null : DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1),
                 "yyyy-MM-dd");
 
-        Page<EmployeeMsisdnDetailsResponse> page = employeeMsisdnRepository.findAllByParam(userName, companyName, pageable);
+       // Page<EmployeeMsisdnDetailsResponse> page = employeeMsisdnRepository.findAllByParam(userName, companyName, pageable);
 
         //List<CompanyDetailsResponse> transactionHistoryList = page.getContent();
 
-        return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
-                PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+        /*return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
+                PageUtils.mapToPaginationResponseDto(page, paginationRequest);*/
+        return null;
 
     }
     @Override
@@ -158,6 +161,77 @@ private final EmployeeMsisdnRepository employeeMsisdnRepository;
         EmployeeMsisdn employeeMsisdn = employeeMsisdnRepository.findById(Id)
                 .orElseThrow( ()-> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND) );
         return employeeMsisdnMapper.mapEntityToResponse(employeeMsisdn);
+    }
+
+    @Override
+    public List<EmployeeMsisdnDetailsResponse> saveMsisdnDetailsBulk(MultipartFile file) {
+        //TODO validate excel file
+        List<EmployeeMsisdnDetailsRequestExcelData> employeeMsisdnDetailsRequestExcelDataList;
+        List<EmployeeMsisdnDetailsResponse> employeeMsisdnDetailsResponseList = new ArrayList<>();
+
+        try {
+            employeeMsisdnDetailsRequestExcelDataList = convertExcelToListOfEntity(file.getInputStream(), file.getOriginalFilename());
+            // logger.trace("Employee msisdn bulk RequestData -> "+employeeMsisdnDetailsRequests);
+
+            return employeeMsisdnDetailsResponseList;
+            // return List.of();
+        }
+    }
+
+    private List<EmployeeMsisdnDetailsRequestExcelData> convertExcelToListOfEntity(InputStream inputStream, String originalFilename) {
+        List<EmployeeMsisdnDetailsRequestExcelData> list = new ArrayList<>();
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            for (int rowNumber = 1; rowNumber <= sheet.getLastRowNum(); rowNumber++) {
+                Row row = sheet.getRow(rowNumber);
+                if (row == null || row.getCell(0) == null || getCellValueAsString(row.getCell(0)).isEmpty()) {
+                    break;
+                }
+                MobileRechargeCustomerCareRequestData entity = createEntityFromRow(row);
+                list.add(entity);
+            }
+        } catch (Exception e) {
+            throw new InvalidRequestDataException(ResponseMessage.INVALID_FILE_FORMAT_ERROR);
+        }
+        return list;
+    }
+
+    private EmployeeMsisdnDetailsRequestExcelData createEntityFromRow(Row row) {
+        EmployeeMsisdnDetailsRequestExcelData entity = new EmployeeMsisdnDetailsRequestExcelData();
+
+        for (int cid = 0; cid <= 0; cid++) {
+            Cell cell = row.getCell(cid);
+
+            try {
+                String cellValue = getCellValueAsString(cell);
+
+                switch (cid) {
+                    case 0 -> entity.setTransactionRefNo(cellValue);
+                }
+            } catch (Exception e) {
+                throw new InvalidRequestDataException(ResponseMessage.INVALID_FILE_FORMAT_ERROR);
+            }
+        }
+        return entity;
+    }
+
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null)
+            return StringUtils.EMPTY;
+
+        CellType cellType = cell.getCellType();
+        if (cellType == CellType.STRING) {
+            return cell.getStringCellValue();
+        } else if (cellType == CellType.NUMERIC) {
+            return String.valueOf(cell.getNumericCellValue());
+        } else if (cellType == CellType.BOOLEAN) {
+            return String.valueOf(cell.getBooleanCellValue());
+        } else {
+            return StringUtils.EMPTY;
+        }
     }
 
     public Date getCurrentDate() {

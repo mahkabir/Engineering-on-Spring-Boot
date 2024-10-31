@@ -8,12 +8,15 @@ import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseM
 import com.mhk.eosb_validation_error_handling.department.request.DepartmentDetailsRequest;
 import com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse;
 import com.mhk.eosb_validation_error_handling.department.service.IDepartmentManagementService;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping( "/department-management")
@@ -52,6 +55,12 @@ public class DepartmentResource {
     public ApiResponse<DepartmentDetailsResponse> getDepartmentDetailsById(@PathVariable Long departmentId) {
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
                 iDepartmentManagementService.getDepartmentDetails(departmentId));
+    }
+
+    @PostMapping(value = "/save-department/bulk", consumes = "multipart/form-data")
+    public ApiResponse<List<EmployeeMsisdnDetailsResponse>> saveDepartmentBulk(@RequestParam("file") MultipartFile file) {
+        List<EmployeeMsisdnDetailsResponse> responses = iDepartmentManagementService.saveDepartmentDetailsBulk(file);
+        return ResponseUtils.createResponseObject(ResponseMessage.OPERATION_SUCCESSFUL,responses);
     }
 
 }

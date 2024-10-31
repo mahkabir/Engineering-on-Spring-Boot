@@ -12,6 +12,7 @@ import com.mhk.eosb_validation_error_handling.company.management.mapper.CompanyM
 import com.mhk.eosb_validation_error_handling.company.management.repository.CompanyRepository;
 import com.mhk.eosb_validation_error_handling.department.mapper.DepartmentMapper;
 import com.mhk.eosb_validation_error_handling.department.repo.DepartmentRepository;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import com.mhk.eosb_validation_error_handling.user.entity.User;
 import com.mhk.eosb_validation_error_handling.user.mapper.UserMapper;
 import com.mhk.eosb_validation_error_handling.user.repo.UserRepository;
@@ -22,8 +23,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -154,6 +157,11 @@ private final UserRepository userRepository;
         User user = userRepository.findById(userId)
                 .orElseThrow( ()-> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND) );
         return userMapper.mapEntityToResponse(user);
+    }
+
+    @Override
+    public List<EmployeeMsisdnDetailsResponse> saveUserDetailsBulk(MultipartFile file) {
+        return List.of();
     }
 
     public Date getCurrentDate() {

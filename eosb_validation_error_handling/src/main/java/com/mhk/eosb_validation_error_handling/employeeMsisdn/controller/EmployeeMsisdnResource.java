@@ -11,7 +11,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping( "/msisdn-management")
@@ -58,5 +61,10 @@ public class EmployeeMsisdnResource {
                 iEmployeeMsisdnManagementService.getUserDetails(msisdn));
     }*/
 
+    @PostMapping(value = "/save-msisdn/bulk", consumes = "multipart/form-data")
+    public ApiResponse<List<EmployeeMsisdnDetailsResponse>> saveMsisdnBulk(@RequestParam("file") MultipartFile file) {
+        List<EmployeeMsisdnDetailsResponse> responses = iEmployeeMsisdnManagementService.saveMsisdnDetailsBulk(file);
+        return ResponseUtils.createResponseObject(ResponseMessage.OPERATION_SUCCESSFUL,responses);
+    }
 
 }

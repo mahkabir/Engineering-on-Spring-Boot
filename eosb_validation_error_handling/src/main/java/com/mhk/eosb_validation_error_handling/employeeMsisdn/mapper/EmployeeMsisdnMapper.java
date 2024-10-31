@@ -35,10 +35,10 @@ public interface EmployeeMsisdnMapper {
         employeeMsisdnDetailsResponse.setComments(employeeMsisdn.getComments());
         employeeMsisdnDetailsResponse.setCanLogin(employeeMsisdn.getCanLogin());
         employeeMsisdnDetailsResponse.setTrackingEnable(employeeMsisdn.getTrackingEnable());
-        employeeMsisdnDetailsResponse.setIsSuperAdmin(employeeMsisdn.getIsSuperAdmin());
+       /* employeeMsisdnDetailsResponse.setIsSuperAdmin(employeeMsisdn.getIsSuperAdmin());
         employeeMsisdnDetailsResponse.setFkSessionId(employeeMsisdn.getFkSessionId());
         employeeMsisdnDetailsResponse.setFkLoginTime(employeeMsisdn.getFkLoginTime());
-        employeeMsisdnDetailsResponse.setLastPasswordChangeTime(employeeMsisdn.getLastPasswordChangeTime());
+        employeeMsisdnDetailsResponse.setLastPasswordChangeTime(employeeMsisdn.getLastPasswordChangeTime());*/
         employeeMsisdnDetailsResponse.setAreaId(employeeMsisdn.getAreaId());
         employeeMsisdnDetailsResponse.setAreaName(employeeMsisdn.getAreaName());
         employeeMsisdnDetailsResponse.setGroupName(employeeMsisdn.getGroupName());

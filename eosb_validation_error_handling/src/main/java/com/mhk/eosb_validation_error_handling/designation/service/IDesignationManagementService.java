@@ -5,6 +5,10 @@ import com.mhk.eosb_validation_error_handling.company.management.domain.response
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 import com.mhk.eosb_validation_error_handling.designation.request.DesignationDetailsRequest;
 import com.mhk.eosb_validation_error_handling.designation.response.DesignationDetailsResponse;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface IDesignationManagementService {
 
@@ -17,6 +21,8 @@ public interface IDesignationManagementService {
                                                                       String companyName,
                                                                       String contactMobile);
     DesignationDetailsResponse getDesignationDetails(Long designationId);
+    List<EmployeeMsisdnDetailsResponse> saveDesignationDetailsBulk(MultipartFile file);
+
 
 
 

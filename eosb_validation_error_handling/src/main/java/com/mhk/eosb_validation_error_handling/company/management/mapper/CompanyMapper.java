@@ -12,14 +12,14 @@ public interface CompanyMapper {
         CompanyDetailsResponse companyDetailsResponse = new CompanyDetailsResponse();
         companyDetailsResponse.setCompanyName(company.getCompanyName());
         companyDetailsResponse.setAddress(company.getAddress());
-        companyDetailsResponse.setContactPerson(company.getContactPerson());
+        //companyDetailsResponse.setContactPerson(company.getContactPerson());
         companyDetailsResponse.setContactMobile(company.getContactMobile());
         companyDetailsResponse.setEmailAddress(company.getEmailAddress());
         companyDetailsResponse.setBillingNumber(company.getBillingNumber());
         companyDetailsResponse.setBillingAmount(company.getBillingAmount());
         companyDetailsResponse.setDailyAmount(company.getDailyAmount());
         companyDetailsResponse.setIsEnableCharging(company.getIsEnableCharging());
-        companyDetailsResponse.setLogo(company.getLogo());
+       // companyDetailsResponse.setLogo(company.getLogo());
         companyDetailsResponse.setRemarks(company.getRemarks());
         return companyDetailsResponse;
     }

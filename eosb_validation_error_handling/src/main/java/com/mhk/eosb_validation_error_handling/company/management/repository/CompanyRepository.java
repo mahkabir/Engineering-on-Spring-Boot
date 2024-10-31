@@ -15,23 +15,23 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     Optional<Company> findByCompanyName(String companyName);
 
-    @Query("select new com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse(" +
+   /* @Query("select new com.mhk.eosb_validation_error_handling.company.management.domain.response.CompanyDetailsResponse(" +
             "c.companyName, " +
             "c.address, " +
-            "c.contactPerson, " +
             "c.contactMobile, " +
             "c.emailAddress, " +
             "c.billingNumber, " +
             "c.billingAmount, " +
             "c.dailyAmount, " +
             "c.isEnableCharging, " +
-            "c.logo, " +
+            "c.logoUrlLarge, " +
+            "c.logoUrlSmall, " +
             "c.remarks) " +
             "from Company c " +
             "where (:companyName is null or c.companyName = :companyName) and " +
             "(:contactMobile is null or c.contactMobile = :contactMobile)" )
     Page<CompanyDetailsResponse> findAllByParam(String companyName,
                                                 String contactMobile,
-                                                Pageable pageable);
+                                                Pageable pageable);*/
 
 }

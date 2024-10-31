@@ -4,6 +4,7 @@ import com.mhk.eosb_validation_error_handling.company.management.domain.common.A
 import com.mhk.eosb_validation_error_handling.company.management.domain.common.ResponseUtils;
 import com.mhk.eosb_validation_error_handling.company.management.domain.response.PaginationResponse;
 import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseMessage;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import com.mhk.eosb_validation_error_handling.user.request.UserDetailsRequest;
 import com.mhk.eosb_validation_error_handling.user.response.UserDetailsResponse;
 import com.mhk.eosb_validation_error_handling.user.service.IUserManagementService;
@@ -11,8 +12,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping( "/user-management")
@@ -51,6 +54,12 @@ public class UserResource {
     public ApiResponse<UserDetailsResponse> getUserDetailsById(@PathVariable Long userId) {
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
                 iUserManagementService.getUserDetails(userId));
+    }
+
+    @PostMapping(value = "/save-user/bulk", consumes = "multipart/form-data")
+    public ApiResponse<List<EmployeeMsisdnDetailsResponse>> saveUserBulk(@RequestParam("file") MultipartFile file) {
+        List<EmployeeMsisdnDetailsResponse> responses = iUserManagementService.saveUserDetailsBulk(file);
+        return ResponseUtils.createResponseObject(ResponseMessage.OPERATION_SUCCESSFUL,responses);
     }
 
 }

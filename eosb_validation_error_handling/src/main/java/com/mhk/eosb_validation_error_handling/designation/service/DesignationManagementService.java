@@ -15,14 +15,17 @@ import com.mhk.eosb_validation_error_handling.designation.mapper.DesignationMapp
 import com.mhk.eosb_validation_error_handling.designation.repo.DesignationRepository;
 import com.mhk.eosb_validation_error_handling.designation.request.DesignationDetailsRequest;
 import com.mhk.eosb_validation_error_handling.designation.response.DesignationDetailsResponse;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -127,6 +130,11 @@ private final DesignationMapper designationMapper;
         Designation designation = designationRepository.findById(designationId)
                 .orElseThrow( ()-> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND) );
         return designationMapper.mapEntityToResponse(designation);
+    }
+
+    @Override
+    public List<EmployeeMsisdnDetailsResponse> saveDesignationDetailsBulk(MultipartFile file) {
+        return List.of();
     }
 
     public Date getCurrentDate() {

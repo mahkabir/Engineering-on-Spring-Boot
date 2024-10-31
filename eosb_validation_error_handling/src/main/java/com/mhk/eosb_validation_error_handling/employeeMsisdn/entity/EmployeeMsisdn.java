@@ -54,13 +54,13 @@ public class EmployeeMsisdn extends BaseEntity {
     private String designationName;
 
     @Column(name = "USER_IS_LOCK")
-    private Short userIsLock;
+    private Boolean userIsLock;
 
     @Column(name = "USER_IS_ACTIVE")
     private Short userIsActive;
 
     @Column(name = "IS_ROBI_EMPLOYEE")
-    private Short isRobiEmployee;
+    private Boolean isRobiEmployee;
 
     @Column(name = "USER_CREATED_BY_NAME", length = 500)
     private String userCreatedByName;
@@ -71,8 +71,8 @@ public class EmployeeMsisdn extends BaseEntity {
     @Column(name = "USER_CREATED_DATE")
     private Date userCreatedDate;
 
-    @Column(name = "IS_NEW", columnDefinition = "smallint default 1")
-    private Short isNew;
+    @Column(name = "IS_NEW")
+    private Boolean isNew;
 
     @Column(name = "LOGIN_COUNT", columnDefinition = "integer default 0")
     private Integer loginCount;
@@ -98,11 +98,11 @@ public class EmployeeMsisdn extends BaseEntity {
     @Column(name = "COMMENTS", length = 500)
     private String comments;
 
-    @Column(name = "CAN_LOGIN", columnDefinition = "smallint default 0")
-    private Short canLogin;
+    @Column(name = "CAN_LOGIN")
+    private Boolean canLogin;
 
     @Column(name = "TRACKING_ENABLE")
-    private Short trackingEnable;
+    private Boolean trackingEnable;
 
     @Column(name = "AREA_ID")
     private Long areaId;
@@ -113,11 +113,8 @@ public class EmployeeMsisdn extends BaseEntity {
     @Column(name = "GROUP_NAME", length = 400)
     private String groupName;
 
-    @Column(name = "IS_ENABLE_CHARGING", columnDefinition = "smallint default 0")
-    private Short isEnableCharging;
-
-    @Column(name = "DISABLED_TRACKING_DT")
-    private Date disabledTrackingDt;
+    @Column(name = "IS_ENABLE_CHARGING")
+    private Boolean isEnableCharging;
 
     @Column(name = "MSISDN_PROFILE", length = 50)
     private String msisdnProfile;
@@ -127,4 +124,8 @@ public class EmployeeMsisdn extends BaseEntity {
 
     @Column(name = "LAST_LOCATION_UPDATE_TIME")
     private Date lastLocationUpdateTime;
+
+    @Column(name = "DISABLED_TRACKING_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date disabledTrackingDate;
 }

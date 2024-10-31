@@ -9,9 +9,13 @@ import com.mhk.eosb_validation_error_handling.company.management.enums.ResponseM
 import com.mhk.eosb_validation_error_handling.designation.request.DesignationDetailsRequest;
 import com.mhk.eosb_validation_error_handling.designation.response.DesignationDetailsResponse;
 import com.mhk.eosb_validation_error_handling.designation.service.IDesignationManagementService;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping( "/designation-management")
@@ -48,6 +52,12 @@ public class DesignationResource {
     public ApiResponse<DesignationDetailsResponse> getDesignationDetailsById(@PathVariable Long designationId) {
         return ResponseUtils.createResponseObject((ResponseMessage.OPERATION_SUCCESSFUL),
                 iDesignationManagementService.getDesignationDetails(designationId));
+    }
+
+    @PostMapping(value = "/save-designation/bulk", consumes = "multipart/form-data")
+    public ApiResponse<List<EmployeeMsisdnDetailsResponse>> saveDesignationBulk(@RequestParam("file") MultipartFile file) {
+        List<EmployeeMsisdnDetailsResponse> responses = iDesignationManagementService.saveDesignationDetailsBulk(file);
+        return ResponseUtils.createResponseObject(ResponseMessage.OPERATION_SUCCESSFUL,responses);
     }
 
 }

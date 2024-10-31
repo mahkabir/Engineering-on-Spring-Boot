@@ -16,14 +16,17 @@ import com.mhk.eosb_validation_error_handling.department.mapper.DepartmentMapper
 import com.mhk.eosb_validation_error_handling.department.repo.DepartmentRepository;
 import com.mhk.eosb_validation_error_handling.department.request.DepartmentDetailsRequest;
 import com.mhk.eosb_validation_error_handling.department.response.DepartmentDetailsResponse;
+import com.mhk.eosb_validation_error_handling.employeeMsisdn.response.EmployeeMsisdnDetailsResponse;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -130,6 +133,11 @@ private final CompanyMapper companyMapper;
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow( ()-> new RecordNotFoundException(ResponseMessage.RECORD_NOT_FOUND) );
         return departmentMapper.mapEntityToResponse(department);
+    }
+
+    @Override
+    public List<EmployeeMsisdnDetailsResponse> saveDepartmentDetailsBulk(MultipartFile file) {
+        return List.of();
     }
 
     public Date getCurrentDate() {

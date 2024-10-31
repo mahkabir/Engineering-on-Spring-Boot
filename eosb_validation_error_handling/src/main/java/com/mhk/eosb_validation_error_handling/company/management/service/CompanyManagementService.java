@@ -87,14 +87,14 @@ private final CompanyMapper companyMapper;
     public void editCompany(Company company, CompanyDetailsRequest companyDetailsRequest) {
         company.setCompanyName(companyDetailsRequest.getCompanyName());
         company.setAddress(companyDetailsRequest.getAddress());
-        company.setContactPerson(companyDetailsRequest.getContactPerson());
+      //  company.setContactPerson(companyDetailsRequest.getContactPerson());
         company.setContactMobile(companyDetailsRequest.getContactMobile());
         company.setEmailAddress(companyDetailsRequest.getEmailAddress());
         company.setBillingNumber(companyDetailsRequest.getBillingNumber());
         company.setBillingAmount(companyDetailsRequest.getBillingAmount());
         company.setDailyAmount(companyDetailsRequest.getDailyAmount());
         company.setIsEnableCharging(companyDetailsRequest.getIsEnableCharging());
-        company.setLogo(companyDetailsRequest.getLogo());
+       // company.setLogo(companyDetailsRequest.getLogo());
         company.setRemarks(companyDetailsRequest.getRemarks());
         company.setUpdatedBy("def admin");
         company.setUpdatedDate(getCurrentDate());
@@ -139,12 +139,13 @@ private final CompanyMapper companyMapper;
         String endDate = Objects.isNull(toDate) ? null : DateTimeUtils.formatDate(DateTimeUtils.addDay(toDate, 1),
                 "yyyy-MM-dd");
 
-        Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(companyName, contactMobile, pageable);
+       // Page<CompanyDetailsResponse> page = companyRepository.findAllByParam(companyName, contactMobile, pageable);
 
         //List<CompanyDetailsResponse> transactionHistoryList = page.getContent();
 
-        return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
-                PageUtils.mapToPaginationResponseDto(page, paginationRequest);
+       /* return page.getContent().isEmpty() ? PageUtils.mapToPaginationResponseDto(Page.empty(), paginationRequest) :
+                PageUtils.mapToPaginationResponseDto(page, paginationRequest);*/
+        return null;
 
     }
 
